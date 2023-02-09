@@ -5,6 +5,7 @@ import com.musdon.employeeservice.dto.DepartmentDto;
 import com.musdon.employeeservice.dto.EmployeeDto;
 import com.musdon.employeeservice.entity.Employee;
 import com.musdon.employeeservice.repository.EmployeeRepository;
+import com.musdon.employeeservice.service.APIClient;
 import com.musdon.employeeservice.service.EmployeeService;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 public class EmployeeServiceImpl implements EmployeeService {
 
     private EmployeeRepository employeeRepository;
-    private WebClient webClient;
+    private APIClient apiClient;
 
     @Override
     public EmployeeDto saveEmployee(EmployeeDto employeeDto) {
@@ -46,10 +47,11 @@ public class EmployeeServiceImpl implements EmployeeService {
 //                DepartmentDto.class);
 //        DepartmentDto departmentDto = responseEntity.getBody();
 
-        DepartmentDto departmentDto = webClient.get().uri("http://localhost:8080/api/departments/" + employee.getDepartmentCode())
-                .retrieve()
-                .bodyToMono(DepartmentDto.class)
-                .block();
+//        DepartmentDto departmentDto = webClient.get().uri("http://localhost:8080/api/departments/" + employee.getDepartmentCode())
+//                .retrieve()
+//                .bodyToMono(DepartmentDto.class)
+//                .block();
+        DepartmentDto departmentDto = apiClient.getDepartmentByCode(employee.getDepartmentCode());
         EmployeeDto employeeDto = EmployeeDto.builder()
                 .id(employee.getId())
                 .firstName(employee.getFirstName())
